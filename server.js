@@ -24,7 +24,6 @@ expressApp.get('/', (req, res) => {
 // API endpoint for retrieving weather from Dark Sky
 // expecting params: latitude, longitude
 expressApp.get('/get-weather', (req, res) => {
-  console.log(req);
 
   // Put together the Dark Sky API URL
   let darkSkyApiUrl =
@@ -42,4 +41,3 @@ expressApp.get('/get-weather', (req, res) => {
     res.send(body);
   });
 });
-
