@@ -4,14 +4,14 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const request = require('request');
 
-const expressApp = express();
-const port = 3001;
 const darkSkyApiUrlBase = 'https://api.darksky.net/forecast';
-const server = expressApp.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`);
-});
 
+// Configure dotenv
 dotenv.config();
+
+// Initialize the Express server
+const expressApp = express();
+const server = expressApp.listen(3001);
 
 // Enable CORS for Express
 expressApp.use(cors());
