@@ -24,7 +24,7 @@ expressApp.use(cookieParser());
 expressApp.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Credentials", 'true');
+  res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
 
@@ -39,15 +39,8 @@ expressApp.get('/get-weather', (req, res) => {
 
   // Put together the Dark Sky API URL
   let darkSkyApiUrl =
-    [
-      darkSkyApiUrlBase,
-      process.env.darkSkyApiKey,
-      [
-        req.query.latitude,
-        req.query.longitude
-      ].join(',')
-    ].join('/') +
-    '?units=' + (req.cookies.units == 'si' ? 'si' : 'us')  + '&exclude=hourly,minutely,alerts,flags';
+    darkSkyApiUrlBase + '/' + process.env.darkSkyApiKey + '/' + req.query.latitude +',' + req.query.longitude
+    + '?units=' + (req.query.units == 'si' ? 'si' : 'us')  + '&exclude=hourly,minutely,alerts,flags';
 
   request(darkSkyApiUrl, (error, response, body) => {
     res.send(body);
