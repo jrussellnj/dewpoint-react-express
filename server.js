@@ -19,16 +19,23 @@ const server = expressApp.listen(3001);
 // Enable CORS for Express
 expressApp.use(cors());
 
-// Certificate
-const privateKey = fs.readFileSync(process.env.sslPrivKeyPath, 'utf8');
-const certificate = fs.readFileSync(process.env.sslCertPath, 'utf8');
-const ca = fs.readFileSync(process.env.sslChainPath, 'utf8');
+// If running in a production environment, enable listening over a secure connection
+if (process.env.NODE_ENV == 'production') {
 
-const credentials = {
-  key: privateKey,
-  cert: certificate,
-  ca: ca
-};
+  // Certificate
+  const privateKey = fs.readFileSync(process.env.sslPrivKeyPath, 'utf8');
+  const certificate = fs.readFileSync(process.env.sslCertPath, 'utf8');
+  const ca = fs.readFileSync(process.env.sslChainPath, 'utf8');
+
+  const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+  };
+
+  // HTTPS server
+  const httpsServer = https.createServer(credentials, expressApp).listen(3443);
+}
 
 // Use cookie parser
 expressApp.use(cookieParser());
@@ -45,9 +52,6 @@ expressApp.use(function(req, res, next) {
 expressApp.get('/', (req, res) => {
   res.send('');
 });
-
-// HTTPS server
-const httpsServer = https.createServer(credentials, expressApp).listen(3443);
 
 // API endpoint for retrieving weather from Dark Sky
 // expecting params: latitude, longitude
